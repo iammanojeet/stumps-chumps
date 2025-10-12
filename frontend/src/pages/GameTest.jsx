@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import Spline from "@splinetool/react-spline"; // Import Spline
 import axios from "axios";
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +14,7 @@ import six from "../utils/hand 6.jpg";
 const STORAGE_KEY = "handCricketMatchLog_v2";
 
 const styles = {
+  // Styles for gameContainer are modified here
   gameContainer: {
     display: "flex",
     flexDirection: "column",
@@ -22,12 +24,17 @@ const styles = {
     fontFamily: "sans-serif",
     padding: "1rem",
     boxSizing: "border-box",
-    backgroundImage: `url('/HomeBg.jpg')`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
     overflow: "hidden",
     position: "relative",
+    // The backgroundImage properties have been removed
+  },
+  splineBackground: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: -1, // Places the spline scene behind all other content
   },
   topBar: {
     position: "absolute",
@@ -374,28 +381,18 @@ const Game = () => {
     }, 1000);
   };
 
-  // --- MODIFIED FUNCTION ---
   const captureAndSend = async () => {
     if (!videoRef.current || !canvasRef.current) return;
     const video = videoRef.current;
     const canvas = canvasRef.current;
-
-    // Determine the largest possible square that can be cropped from the center.
     const videoWidth = video.videoWidth;
     const videoHeight = video.videoHeight;
     const cropSize = Math.min(videoWidth, videoHeight);
-
-    // Calculate the top-left corner (sx, sy) of the crop area to keep it centered.
     const sx = (videoWidth - cropSize) / 2;
     const sy = (videoHeight - cropSize) / 2;
-
-    // Set the canvas to be a square of that size.
     canvas.width = cropSize;
     canvas.height = cropSize;
-
     const context = canvas.getContext("2d");
-
-    // Draw only the cropped, central square part of the video onto the canvas.
     context.drawImage(
       video,
       sx,
@@ -407,15 +404,12 @@ const Game = () => {
       cropSize,
       cropSize
     );
-
     const imageSrc = canvas.toDataURL("image/jpeg");
     if (!imageSrc) return console.error("Failed to capture image.");
-
     const blob = await fetch(imageSrc).then((res) => res.blob());
     const file = new File([blob], "hand.jpg", { type: "image/jpeg" });
     const formData = new FormData();
     formData.append("file", file);
-
     try {
       const res = await axios.post("http://127.0.0.1:8000/detect", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -434,13 +428,11 @@ const Game = () => {
       updateMatch(userPred, aiPred);
     }
   };
-  // --- END OF MODIFICATION ---
 
   const saveMatchRecord = (finalState, settings) => {
     try {
       const log = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
       const { userBatsFirst } = settings;
-
       let winner;
       if (finalState.matchResult.includes(nickname.toUpperCase())) {
         winner = "Human";
@@ -449,7 +441,6 @@ const Game = () => {
       } else {
         winner = "Draw";
       }
-
       const humanScore = userBatsFirst
         ? finalState.firstInning.runs
         : finalState.currentInning.teamRuns;
@@ -462,14 +453,12 @@ const Game = () => {
       const aiBalls = !userBatsFirst
         ? finalState.firstInning.totalBalls
         : finalState.currentInning.totalBalls;
-
       const humanWickets = userBatsFirst
         ? finalState.currentInning.wickets
         : finalState.firstInning.wickets;
       const aiWickets = userBatsFirst
         ? finalState.firstInning.wickets
         : finalState.currentInning.wickets;
-
       const newRecord = {
         winner,
         humanScore,
@@ -480,7 +469,6 @@ const Game = () => {
         aiWickets,
         date: new Date().toISOString(),
       };
-
       log.push(newRecord);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
       toast.success("Match record saved!", { id: "save-record-toast" });
@@ -492,21 +480,16 @@ const Game = () => {
 
   const updateMatch = (userNum, aiNum) => {
     if (!gameSettings) return;
-
     setMatch((prev) => {
       if (prev.gameOver) return prev;
-
       const newState = JSON.parse(JSON.stringify(prev));
       const current = newState.currentInning;
-
       const isUserBattingNow =
         (newState.inning === 1 && gameSettings.userBatsFirst) ||
         (newState.inning === 2 && !gameSettings.userBatsFirst);
-
       current.totalBalls += 1;
       const isOut = userNum === aiNum;
       let inningOver = false;
-
       if (isOut) {
         current.wickets += 1;
         if (current.wickets >= gameSettings.wickets) {
@@ -523,14 +506,12 @@ const Game = () => {
           current.teamRuns += runsScored;
         }
       }
-
       if (
         gameSettings.overs !== "Unlimited" &&
         current.totalBalls >= gameSettings.overs * 6
       ) {
         inningOver = true;
       }
-
       if (newState.inning === 2 && current.teamRuns >= newState.target) {
         newState.gameOver = true;
         const winner = isUserBattingNow ? nickname : "Mr. AI";
@@ -567,13 +548,11 @@ const Game = () => {
           saveMatchRecord(newState, gameSettings);
         }
       }
-
       current.overs = calculateOvers(current.totalBalls);
       current.runRate =
         current.totalBalls > 0
           ? ((current.teamRuns / current.totalBalls) * 6).toFixed(2)
           : 0.0;
-
       return newState;
     });
   };
@@ -603,7 +582,12 @@ const Game = () => {
   if (!gameSettings) {
     return (
       <div style={styles.gameContainer}>
-        <h1 style={{ color: "white" }}>Loading Game Settings...</h1>
+        {/* Spline component added as background */}
+        <Spline
+          scene="https://prod.spline.design/P8gzGnUcT-uye4At/scene.splinecode"
+          style={styles.splineBackground}
+        />
+        <h1 style={{ color: "white", zIndex: 1 }}>Loading Game Settings...</h1>
         <Toaster />
       </div>
     );
@@ -622,6 +606,11 @@ const Game = () => {
 
   return (
     <div style={styles.gameContainer}>
+      {/* Spline component added as background */}
+      <Spline
+        scene="https://prod.spline.design/P8gzGnUcT-uye4At/scene.splinecode"
+        style={styles.splineBackground}
+      />
       <canvas ref={canvasRef} style={{ display: "none" }} />
       <div style={styles.topBar}>
         <button style={styles.goBackBtn} onClick={handleGoBack}>
