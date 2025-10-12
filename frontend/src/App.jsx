@@ -12,6 +12,7 @@ import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import Homek from "./pages/HomePageKoushtav.jsx";
 import All from "./pages/all.jsx";
+import LoaderWrapper from "./pages/LoaderWrapper";
 
 export default function App() {
   return (
@@ -20,11 +21,46 @@ export default function App() {
         <Route path="/prev" element={<HomePage />} />
 
         {/* Final Paths */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<All />} />
-        <Route path="/toss" element={<Toss />} />
-        <Route path="/game" element={<GameTest />} />
+        <Route
+          path="/register"
+          element={
+            <LoaderWrapper>
+              <Register />
+            </LoaderWrapper>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <LoaderWrapper>
+              <Login />
+            </LoaderWrapper>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <LoaderWrapper>
+              <All />
+            </LoaderWrapper>
+          }
+        />
+        <Route
+          path="/toss"
+          element={
+            <LoaderWrapper>
+              <Toss />
+            </LoaderWrapper>
+          }
+        />
+        <Route
+          path="/game"
+          element={
+            <LoaderWrapper>
+              <GameTest />
+            </LoaderWrapper>
+          }
+        />
         {/* Final Paths */}
 
         {/* <Route path="/tossk" element={<Tossk/>} /> */}
