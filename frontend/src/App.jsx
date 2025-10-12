@@ -12,34 +12,32 @@ import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import Homek from "./pages/HomePageKoushtav.jsx";
 import All from "./pages/all.jsx";
-// import Tossk from "./pages/TossKoushtav.jsx";
-// import { ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/prev" element={<HomePage />} />
 
+        {/* Final Paths */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/k" element={<Homek />} />
-        <Route path="/all" element={<All/>} />
+        <Route path="/" element={<All />} />
+        <Route path="/toss" element={<Toss />} />
+        <Route path="/game" element={<GameTest />} />
+        {/* Final Paths */}
+
         {/* <Route path="/tossk" element={<Tossk/>} /> */}
 
-
+        <Route path="/k" element={<Homek />} />
         <Route path="/home" element={<Home />} />
-
 
         <Route path="/homeSayan" element={<Home_Sayan />} />
 
         {/* <Route path="/game" element={<GamePage />} /> */}
-        <Route path="/game" element={<GameTest />} />
         <Route path="/history" element={<History />} />
         <Route path="/records" element={<Records />} />
         <Route path="/rules" element={<Rules />} />
-        <Route path="/toss" element={<Toss />} />
       </Routes>
     </BrowserRouter>
   );
