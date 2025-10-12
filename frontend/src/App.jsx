@@ -10,6 +10,9 @@ import Toss from "./pages/Toss.jsx";
 import Home_Sayan from "./pages/HomePage_Sayan.jsx";
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
+import Homek from "./pages/HomePageKoushtav.jsx";
+import All from "./pages/all.jsx";
+// import Tossk from "./pages/TossKoushtav.jsx";
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
@@ -21,6 +24,9 @@ export default function App() {
 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/k" element={<Homek />} />
+        <Route path="/all" element={<All/>} />
+        {/* <Route path="/tossk" element={<Tossk/>} /> */}
 
 
         <Route path="/home" element={<Home />} />
