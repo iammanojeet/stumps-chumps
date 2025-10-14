@@ -4,12 +4,13 @@ import axios from "axios";
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import zero from "../utils/hand 0.jpg";
-import two from "../utils/hand 2.jpg";
-import three from "../utils/hand 3.jpg";
-import four from "../utils/hand 4.jpg";
-import five from "../utils/hand 5.jpg";
-import six from "../utils/hand 6.jpg";
+import zero from "../utils/hand 0.png";
+import one from "../utils/hand 1.png";
+import two from "../utils/hand 2.png";
+import three from "../utils/hand 3.png";
+import four from "../utils/hand 4.png";
+import five from "../utils/hand 5.png";
+import six from "../utils/hand 6.png";
 
 const STORAGE_KEY = "handCricketMatchLog_v2";
 
@@ -105,9 +106,10 @@ const styles = {
   aiCard: {
     flex: 1,
     aspectRatio: "1 / 1",
-    backgroundColor: "rgba(10, 10, 10, 0.8)",
+    backgroundColor: "white", // CHANGE: Updated background color
     borderRadius: "15px",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
+    boxShadow: "0 0 5px #fff, 0 0 10px #fff, 0 0 15px #0fa, 0 0 20px #0fa",
+    border: "2px solid #fff",
     position: "relative",
     overflow: "hidden",
     display: "flex",
@@ -117,7 +119,7 @@ const styles = {
   playerCard: {
     flex: 1,
     aspectRatio: "1 / 1",
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    backgroundColor: "white", // CHANGE: Updated background color
     borderRadius: "15px",
     boxShadow: "0 0 5px #fff, 0 0 10px #fff, 0 0 15px #0fa, 0 0 20px #0fa",
     border: "2px solid #fff",
@@ -205,6 +207,7 @@ const styles = {
 
 const handImages = {
   0: zero,
+  1: one,
   2: two,
   3: three,
   4: four,
@@ -584,7 +587,7 @@ const Game = () => {
       <div style={styles.gameContainer}>
         {/* Spline component added as background */}
         <Spline
-          scene="https://prod.spline.design/P8gzGnUcT-uye4At/scene.splinecode"
+          scene="https://prod.spline.design/cpcwbeNBmDXC29rx/scene.splinecode"
           style={styles.splineBackground}
         />
         <h1 style={{ color: "white", zIndex: 1 }}>Loading Game Settings...</h1>
@@ -608,7 +611,7 @@ const Game = () => {
     <div style={styles.gameContainer}>
       {/* Spline component added as background */}
       <Spline
-        scene="https://prod.spline.design/P8gzGnUcT-uye4At/scene.splinecode"
+        scene="https://prod.spline.design/cpcwbeNBmDXC29rx/scene.splinecode"
         style={styles.splineBackground}
       />
       <canvas ref={canvasRef} style={{ display: "none" }} />
@@ -669,11 +672,13 @@ const Game = () => {
             </div>
           </div>
           <div style={styles.aiCard}>
+            <div style={styles.neonCircleOverlay}></div>
             <span
               style={{
                 fontSize: "8rem",
-                color: "white",
-                textShadow: "0 0 10px #fff",
+                color: "black", // CHANGE: Text color to be visible on white
+                textShadow: "0 0 10px #ccc",
+                zIndex: 6,
               }}
             >
               {aiChoice !== null ? (
@@ -688,12 +693,12 @@ const Game = () => {
                     }}
                   />
                 ) : (
-                  <span style={{ fontSize: "5rem", color: "white" }}>
+                  <span style={{ fontSize: "5rem", color: "black" }}>
                     {aiChoice}
                   </span>
                 )
               ) : (
-                <span style={{ fontSize: "5rem", color: "white" }}>?</span>
+                <span style={{ fontSize: "5rem", color: "black" }}>?</span>
               )}
             </span>
           </div>

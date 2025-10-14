@@ -7,7 +7,7 @@ from PIL import Image
 import io
 
 # --- Config ---
-MODEL_PATH = './model/hand_model.pth'
+MODEL_PATH = './model/hand_model_1.pth'
 CLASS_NAMES = ['0', '1', '2', '3', '4', '5', '6']
 NUM_CLASSES = len(CLASS_NAMES)
 
